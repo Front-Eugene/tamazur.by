@@ -535,6 +535,12 @@ form span {
 
 @media screen and (min-width: 100px) and (max-width: 1200px) {
 
+    .educator-item {
+        width: 60%;
+        margin-bottom: 30px;
+        height: auto;
+    }
+
     .address p {
         width: 90%;
     }
