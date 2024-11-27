@@ -180,12 +180,12 @@
             <div class="section-wrap">
                 <img class="form-img" src="src/img/form-img.png" alt="">
 
-                <form id="tg-form" method="post" action="send.php" style="background: none;">
+                <form id="tg-form" class="tg-form" style="background: none;">
                     <p>Научитесь танцевать за 2 месяца</p>
                     <h2>запишитесь на первое <span>пробное</span> занятие</h2>
                     <div><input class="form__input" name="name" id="name" type="text" placeholder="Введите ваше имя"
                             required="" minlength="2"></div>
-                    <div><input class="form__input tel-1" name="phone" id="phone" type="tel"
+                    <div><input class="form__input tel-1 tel" name="phone" id="phone" type="tel"
                             placeholder="Ваш номер телефона" required=""></div>
                     <div><button type="submit" class="form__button screen-btn" id="btn">Записаться</button></div>
                     <label style="display: flex;">
@@ -482,20 +482,14 @@
         <section class="form form-down">
             <div class="section-wrap">
                 <img class="form-img" src="src/img/form-down.png" alt="">
-                <form id="tg-form" method="post" action="send.php" style="background: none;">
+                <form id="tg-form" class="tg-form" style="background: none;">
                     <p>Научитесь танцевать за 2 месяца</p>
                     <h2>запишитесь на первое <span>пробное</span> занятие</h2>
-                    <div>
-                        <input class="form__input" name="name" id="name" type="text" placeholder="Введите ваше имя"
-                            required="" minlength="2">
-                    </div>
-                    <div>
-                        <input class="form__input tel-1" name="phone" id="phone" type="tel"
-                            placeholder="Ваш номер телефона" required="">
-                    </div>
-                    <div>
-                        <button type="submit" class="form__button screen-btn" id="btn">Записаться</button>
-                    </div>
+                    <div><input class="form__input" name="name" id="name" type="text" placeholder="Введите ваше имя"
+                            required="" minlength="2"></div>
+                    <div><input class="form__input tel-1 tel" name="phone" id="phone" type="tel"
+                            placeholder="Ваш номер телефона" required=""></div>
+                    <div><button type="submit" class="form__button screen-btn" id="btn">Записаться</button></div>
                     <label style="display: flex;">
                         <input type="checkbox" checked="" required="">
                         <p class="agree">Я согласен с политикой конфиденциальности и пользовательским соглашением</p>
@@ -622,55 +616,60 @@
         
         let lastSubmitTime = 0;
         const submitInterval = 30000; // 30 секунд в миллисекундах
-        
-        document.getElementById('tg-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-        
-            // Проверяем, прошло ли уже 30 секунд с момента последней отправки
-            const currentTime = new Date().getTime();
-            if (currentTime - lastSubmitTime < submitInterval) {
-                alert('Пожалуйста, подождите 30 секунд перед отправкой следующей заявки.');
-                return;
-            }
-        
-            let message = `<b>Заявка с сайта</b>\n`;
-            message += `<b>kapsula.bestbuy.of.by</b>\n`;
-            message += `<b>Имя:</b> ${this.name.value} \n`;
-            message += `<b>Телефон:</b> ${this.phone.value} \n`;
-            message += `<b>Телефон:</b> ${this.massage.value} \n`;
-        
-            // Валидация имени и номера телефона
-            if (this.name === '' || this.phone === '') {
-                alert('Имя и номер телефона обязательны для заполнения');
-                return; // Остановить отправку формы, если валидация не пройдена
-            }
-        
-            axios.post(URI_API, {
-                chat_id: CHAT_ID,
-                parse_mode: 'html',
-                text: message
-            })
-            .then((res) => {
-                this.name.value = '';
-                this.phone.value = '';
-                document.getElementById('tg-form').setAttribute('disabled', '');
-        
-                window.location.href = 'thanks.php';
-        
-                let noBtn = document.querySelector('.click-btn');
-                noBtn.addEventListener('click', function() {
-                    noBtn.classList.add('remove');
-                    noBtn.disabled = true;
-                });
-        
-                // Обновляем время последней отправки
-                lastSubmitTime = currentTime;
-            })
-            .catch((error) => {
-                console.error('Ошибка отправки сообщения в Telegram:', error);
-                // Обработать ошибку здесь, если необходимо
+
+
+        document.querySelectorAll('.tg-form').forEach(function(form) {
+        form.addEventListener('submit', function(e) {
+        e.preventDefault();
+    
+        // Сохраняем ссылку на this
+        const currentForm = this;
+    
+        // Проверяем, прошло ли уже 30 секунд с момента последней отправки
+        const currentTime = new Date().getTime();
+        if (currentTime - lastSubmitTime < submitInterval) {
+            alert('Пожалуйста, подождите 30 секунд перед отправкой следующей заявки.');
+            return;
+        }
+    
+        let message = `<b>Заявка с сайта</b>\n`;
+        message += `<b>kapsula.bestbuy.of.by</b>\n`;
+        message += `<b>Имя:</b> ${currentForm.name.value} \n`;
+        message += `<b>Телефон:</b> ${currentForm.phone.value} \n`;
+    
+        // Валидация имени и номера телефона
+        if (currentForm.name === '' || currentForm.phone === '') {
+            alert('Имя и номер телефона обязательны для заполнения');
+            return; // Остановить отправку формы, если валидация не пройдена
+        }
+    
+        axios.post(URI_API, {
+            chat_id: CHAT_ID,
+            parse_mode: 'html',
+            text: message
+        })
+        .then(function(res) {
+            currentForm.name.value = '';
+            currentForm.phone.value = '';
+            form.setAttribute('disabled', '');
+    
+            // window.location.href = 'thanks.php';
+    
+            let noBtn = form.querySelector('.click-btn');
+            noBtn.addEventListener('click', function() {
+                noBtn.classList.add('remove');
+                noBtn.disabled = true;
             });
+    
+            // Обновляем время последней отправки
+            lastSubmitTime = currentTime;
+        })
+        .catch(function(error) {
+            console.error('Ошибка отправки сообщения в Telegram:', error);
+            // Обработать ошибку здесь, если необходимо
         });
+    });
+});
 
     </script>
 </body>
