@@ -69,7 +69,7 @@
             <div class="section-wrap screen-wrap">
                 <img class="screen-girl" src="src/img/screen-girl.png" alt="">
                 <div class="screen-text">
-                    <h1>Профессиональная школа восточного танца под руководством Евгении Храмцевич</h1>
+                    <h1>Профессиональная студия восточного танца под руководством Евгении Храмцевич</h1>
                     <p>Занятия, которые вдохновляют!</p>
                     <div class="descr-wrap">
                         <div class="screen-perks"><img src="src/img/line.png" alt="">
@@ -353,7 +353,7 @@
                             танца. Всегда царит дружелюбная атмосфера. Организовываются конкурсы, развлекательные
                             мероприятия,
                             огромное количество мастер-классов. После посещения занятия, ребенок получает колоссальный
-                            заряд бодрости и позитивных эмоций. А главное, Школа восточного танца ТАМАЗУР воспитывает
+                            заряд бодрости и позитивных эмоций. А главное, студия восточного танца ТАМАЗУР воспитывает
                             настоящих Чемпионов, И ЭТО ПРАВДА!!!! Желаю Вам творческих успехов, реализации самых
                             грандиозных
                             проектов, хорошего настроения и ТОЛЬКО ВПЕРЁД!!!!
@@ -364,7 +364,7 @@
                         <img src="src/img/r4.png" alt="">
                         <p>
                             В школе восточного танца "Тамазур" занимаемся уже 5 лет. Сказать,
-                            что это лучшая школа - не сказать ничего!!! Здесь работают профессионалы
+                            что это лучшая студия - не сказать ничего!!! Здесь работают профессионалы
                             своего дела! Огромное спасибо хочется сказать руководителю школы и нашему
                             любимому тренеру Храмцевич Евгении Анатольевне. Спасибо за ваш труд и
                             профессиональный рост наших детей.
@@ -382,7 +382,7 @@
                             Тренера грациозные и самые лучшие!!! Марина Вадимовна придумывает интереснейшие
                             постановки, ее ученицы занимают первые места на конкурсах. Огромный поклон этому
                             тренеру! Евгения Анатольевна шикарна и интересна! И её ученицы тоже занимают первые
-                            места)) В общем, школа танца Тамазур — это сила!!!
+                            места)) В общем, студия танца Тамазур — это сила!!!
                         </p>
                         <a href="vk.com/id170866744">vk.com/id170866744</a>
                     </div>
@@ -473,7 +473,7 @@
 
         <section class="address" id="_6">
             <h2>Наш адрес</h2>
-            <p>ст.м.Кунцевщина ул. Домбровская, 9. 2-й этаж Школа восточного танца Тамазур</p>
+            <p>ст.м.Кунцевщина ул. Домбровская, 9. 2-й этаж студия восточного танца Тамазур</p>
             <iframe
                 src="https://yandex.ru/map-widget/v1/?um=constructor%3Ab7e49e170e46edbad73f2175d758500ea65b113617ad1c78ea4ef694a132765b&amp;source=constructor"
                 width="100%" height="500px" frameborder="0"></iframe>
@@ -482,15 +482,20 @@
         <section class="form form-down">
             <div class="section-wrap">
                 <img class="form-img" src="src/img/form-down.png" alt="">
-
                 <form id="tg-form" method="post" action="send.php" style="background: none;">
                     <p>Научитесь танцевать за 2 месяца</p>
                     <h2>запишитесь на первое <span>пробное</span> занятие</h2>
-                    <div><input class="form__input" name="name" id="name" type="text" placeholder="Введите ваше имя"
-                            required="" minlength="2"></div>
-                    <div><input class="form__input tel-1" name="phone" id="phone" type="tel"
-                            placeholder="Ваш номер телефона" required=""></div>
-                    <div><button type="submit" class="form__button screen-btn" id="btn">Записаться</button></div>
+                    <div>
+                        <input class="form__input" name="name" id="name" type="text" placeholder="Введите ваше имя"
+                            required="" minlength="2">
+                    </div>
+                    <div>
+                        <input class="form__input tel-1" name="phone" id="phone" type="tel"
+                            placeholder="Ваш номер телефона" required="">
+                    </div>
+                    <div>
+                        <button type="submit" class="form__button screen-btn" id="btn">Записаться</button>
+                    </div>
                     <label style="display: flex;">
                         <input type="checkbox" checked="" required="">
                         <p class="agree">Я согласен с политикой конфиденциальности и пользовательским соглашением</p>
@@ -518,6 +523,8 @@
             </div>
         </div>
     </footer>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js?ver=1.0.0" id="tgsend-js"></script>
 
     <script>
         // MENU
@@ -559,6 +566,111 @@
             showSlide(currentSlide);
         });
         // SLIDER
+
+
+        //FORM
+
+        const TOKEN = "7383974382:AAF9O7Dy-boLaBH9C2ZnUI4hLIi8Ovrl0_k",
+            CHAT_ID = "-1002297511113",
+            URI_API = `https://api.telegram.org/bot${TOKEN}/sendMessage`,
+            phoneInput = document.getElementById('phone');
+
+        // МАСКА ТЕЛЕФОНА
+        [].forEach.call(document.querySelectorAll('.tel'), function (input) {
+            var keyCode;
+            function mask(event) {
+                event.keyCode && (keyCode = event.keyCode);
+                var pos = this.selectionStart;
+                if (pos < 3) event.preventDefault();
+                var matrix = "+375 (__) ___ - __ - __",
+                    i = 0,
+                    def = matrix.replace(/\D/g, ""),
+                    val = this.value.replace(/\D/g, ""),
+                    new_value = matrix.replace(/[_\d]/g, function (a) {
+                        return i < val.length ? val.charAt(i++) : a
+                    });
+                i = new_value.indexOf("_");
+                if (i != -1) {
+                    i < 5 && (i = 3);
+                    new_value = new_value.slice(0, i)
+                }
+                var reg = matrix.substr(0, this.value.length).replace(/_+/g,
+                    function (a) {
+                        return "\\d{1," + a.length + "}"
+                    }).replace(/[+()]/g, "\\$&");
+                reg = new RegExp("^" + reg + "$");
+                if (!reg.test(this.value) || this.value.length < 5 || keyCode > 47 && keyCode < 58) {
+                    this.value = new_value;
+                }
+                if (event.type == "blur" && this.value.length < 5) {
+                    this.value = "";
+                }
+            }
+
+            input.addEventListener("input", mask, false);
+            input.addEventListener("focus", mask, false);
+            input.addEventListener("blur", mask, false);
+            input.addEventListener("keydown", mask, false);
+
+        });
+
+        phoneInput.addEventListener('keydown', function (event) {
+            if (event.key.match(/[a-zа-я]/i) && event.key !== 'Backspace') {
+                event.preventDefault(); // Prevent typing any letters except Backspace
+            }
+        });
+        
+        let lastSubmitTime = 0;
+        const submitInterval = 30000; // 30 секунд в миллисекундах
+        
+        document.getElementById('tg-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+        
+            // Проверяем, прошло ли уже 30 секунд с момента последней отправки
+            const currentTime = new Date().getTime();
+            if (currentTime - lastSubmitTime < submitInterval) {
+                alert('Пожалуйста, подождите 30 секунд перед отправкой следующей заявки.');
+                return;
+            }
+        
+            let message = `<b>Заявка с сайта</b>\n`;
+            message += `<b>kapsula.bestbuy.of.by</b>\n`;
+            message += `<b>Имя:</b> ${this.name.value} \n`;
+            message += `<b>Телефон:</b> ${this.phone.value} \n`;
+            message += `<b>Телефон:</b> ${this.massage.value} \n`;
+        
+            // Валидация имени и номера телефона
+            if (this.name === '' || this.phone === '') {
+                alert('Имя и номер телефона обязательны для заполнения');
+                return; // Остановить отправку формы, если валидация не пройдена
+            }
+        
+            axios.post(URI_API, {
+                chat_id: CHAT_ID,
+                parse_mode: 'html',
+                text: message
+            })
+            .then((res) => {
+                this.name.value = '';
+                this.phone.value = '';
+                document.getElementById('tg-form').setAttribute('disabled', '');
+        
+                window.location.href = 'thanks.php';
+        
+                let noBtn = document.querySelector('.click-btn');
+                noBtn.addEventListener('click', function() {
+                    noBtn.classList.add('remove');
+                    noBtn.disabled = true;
+                });
+        
+                // Обновляем время последней отправки
+                lastSubmitTime = currentTime;
+            })
+            .catch((error) => {
+                console.error('Ошибка отправки сообщения в Telegram:', error);
+                // Обработать ошибку здесь, если необходимо
+            });
+        });
 
     </script>
 </body>
